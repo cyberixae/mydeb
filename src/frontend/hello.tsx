@@ -5,9 +5,9 @@ import './app.css';
 export function Hello() {
   React.useEffect(() => {
     fetch('/api').then((data) => {
-      console.log(data)
-    })
-  }, [])
+      console.log(data);
+    });
+  }, []);
   return (
     <div className="App">
       <header className="App-header">

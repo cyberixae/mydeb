@@ -13,12 +13,12 @@ const router = createBrowserRouter([
   {
     path: 'package/:packageId',
     element: <Deb />,
-    loader: debLoader
+    loader: debLoader,
   },
   {
     path: 'package',
     element: <DebIndex />,
-    loader: debIndexLoader
+    loader: debIndexLoader,
   },
 ]);
 
