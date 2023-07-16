@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -10,6 +11,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1",
@@ -17,7 +19,8 @@
     "typescript": "^4.4.2"
   },
   "devDependencies": {
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.1"
   },
   "eslintConfig": {
     "extends": [
@@ -39,7 +42,9 @@
   },
   "scripts": {
     "prettify": "yarn prettier --write '**/*.{css,html,js,json,md,ts,tsx}'",
-    "start": "react-scripts start",
+    "dev-backend": "yarn ts-node src/backend",
+    "dev-frontend": "react-scripts start",
+    "dev": "yarn dev-backend & yarn dev-frontend",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
