@@ -42,7 +42,7 @@
   },
   "scripts": {
     "prettify": "yarn prettier --write '**/*.{css,html,js,json,md,ts,tsx}'",
-    "dev-backend": "yarn ts-node src/backend",
+    "dev-backend": "yarn ts-node src/backend/backend",
     "dev-frontend": "react-scripts start",
     "dev": "yarn dev-backend & yarn dev-frontend",
     "build": "react-scripts build",
