@@ -16,24 +16,27 @@ export function Deb() {
 
   return (
     <div>
-      <h2>{deb['Package']}</h2>
+      <h2>{deb.info.name}</h2>
       <br />
-      <div>Description: {deb['Description']}</div>
+      <div>Description: {deb.info.description}</div>
       <br />
       <div>
         Dependencies:{' '}
-        {deb['Depends']?.split(', ').map((alternatives: string) =>
-          alternatives.split(' | ').map((alternative) => {
-            const [name, ...extra] = alternative.split(' ');
-            const avail = deb['mydeb_available'][name];
+        {deb.info.depends.map((alternatives: Array<string>) =>
+          alternatives.map((name) => {
+            const avail = deb['available'][name];
             return (
-              <span>
-                {avail ? <a href={`/package/${name}`}>{name}</a> : name} {extra.join(' ')}
-                ,{' '}
-              </span>
+              <span>{avail ? <a href={`/package/${name}`}>{name}</a> : name}, </span>
             );
           }),
         )}
+      </div>
+      <br />
+      <div>
+        Reverse:{' '}
+        {deb.reverse.map((name: string) => {
+          return <span>{<a href={`/package/${name}`}>{name}</a>}, </span>;
+        })}
       </div>
     </div>
   );
