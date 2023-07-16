@@ -8,17 +8,13 @@ import { DebIndex, debIndexLoader } from './deb-index';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Hello />,
+    element: <DebIndex />,
+    loader: debIndexLoader,
   },
   {
     path: 'package/:packageId',
     element: <Deb />,
     loader: debLoader,
-  },
-  {
-    path: 'package',
-    element: <DebIndex />,
-    loader: debIndexLoader,
   },
 ]);
 

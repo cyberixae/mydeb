@@ -15,11 +15,13 @@ export function DebIndex({}: any) {
 
   return (
     <div>
+      <h1>MyDeb</h1>
+      <br />
       {debs
         .sort((a: any, b: any) => (a.name > b.name ? 1 : -1))
         .map((deb: any) => (
           <span id={deb.name}>
-            <a href={deb.name}>{deb.name}</a>,{' '}
+            <a href={`/package/${deb.name}`}>{deb.name}</a>,{' '}
           </span>
         ))}
     </div>

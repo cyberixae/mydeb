@@ -4,7 +4,7 @@ import './app.css';
 import { EDElement } from '../types/status';
 
 function absurdElement(elem: never): never {
-  throw new Error('absurd element')
+  throw new Error('absurd element');
 }
 
 export async function debLoader({ params }: any) {
@@ -21,22 +21,32 @@ export function Deb() {
 
   return (
     <div>
+      <h1>
+        <a href="/">MyDeb</a>
+      </h1>
+      <br />
       <h2>{deb.info.name}</h2>
       <br />
       <div>{deb.info.description.synopsis}</div>
       <br />
-      <div>{deb.info.description.extended.map((elem: EDElement, i: number) => (<React.Fragment key={i}>{(() => {
-        if (elem._ED === 'blank') {
-          return <br />
-        }
-        if (elem._ED === 'verbatim') {
-          return <pre>{elem.lines}</pre>
-        }
-        if (elem._ED === 'paragraph') {
-          return <p>{elem.lines}</p>
-        }
-        return absurdElement(elem)
-      })()}</React.Fragment>))}</div>
+      <div>
+        {deb.info.description.extended.map((elem: EDElement, i: number) => (
+          <React.Fragment key={i}>
+            {(() => {
+              if (elem._ED === 'blank') {
+                return <br />;
+              }
+              if (elem._ED === 'verbatim') {
+                return <pre>{elem.lines.join('\n')}</pre>;
+              }
+              if (elem._ED === 'paragraph') {
+                return <p>{elem.lines.join('\n')}</p>;
+              }
+              return absurdElement(elem);
+            })()}
+          </React.Fragment>
+        ))}
+      </div>
       <br />
       <div>
         Dependencies:{' '}

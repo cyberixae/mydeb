@@ -15,62 +15,62 @@ function collect<K extends string, V>(kvs: Array<[K, V]>): Record<K, Array<V>> {
   return result;
 }
 
-function *descriptionElements(lines: Array<string>): Generator<EDElement, void, unknown> {
-  let current: EDElement|null = null
+function* descriptionElements(lines: Array<string>): Generator<EDElement, void, unknown> {
+  let current: EDElement | null = null;
   for (const line of lines) {
     if (line === ' .') {
       if (current !== null) {
-        yield current
+        yield current;
       }
-      yield { _ED: 'blank' }
-      current = null
+      yield { _ED: 'blank' };
+      current = null;
     } else if (line.startsWith(' .')) {
       /* ignore future expansion */
     } else if (line.startsWith('  ')) {
       if (current === null) {
         current = {
           _ED: 'verbatim',
-          lines: [line]
-        }
+          lines: [line],
+        };
       } else {
         if (current._ED === 'verbatim') {
-          current.lines.push(line)
+          current.lines.push(line);
         } else {
-          yield current
+          yield current;
           current = {
             _ED: 'verbatim',
-            lines: [line]
-          }
+            lines: [line],
+          };
         }
       }
     } else if (line.startsWith(' ')) {
       if (current === null) {
         current = {
           _ED: 'paragraph',
-          lines: [line]
-        }
+          lines: [line],
+        };
       } else {
         if (current._ED === 'paragraph') {
-          current.lines.push(line)
+          current.lines.push(line);
         } else {
-          yield current
+          yield current;
           current = {
             _ED: 'paragraph',
-            lines: [line]
-          }
+            lines: [line],
+          };
         }
       }
     } else {
-      console.warn(`invalid description line "${line}"`)
+      console.warn(`invalid description line "${line}"`);
     }
   }
   if (current !== null) {
-    yield current
+    yield current;
   }
 }
 
 async function main() {
-  const TAG = 'NEXT'
+  const TAG = 'NEXT';
 
   const file = path.join(__dirname, '../../private/status.real');
   const data = await fs.readFile(file, 'utf-8');
@@ -89,19 +89,20 @@ async function main() {
 
       const status = entry['Status'];
 
-      const [synopsis, ...ext] = entry['Description'].split(TAG)
+      const [synopsis, ...ext] = entry['Description'].split(TAG);
 
       const description: Description = {
         synopsis,
         extended: Array.from(descriptionElements(ext)),
-      }
+      };
 
-      const depends = entry['Depends']?.split(', ').map((alternatives: string) =>
-            alternatives.split(' | ').map((alternative) => {
-              const [name] = alternative.split(' ');
-              return name;
-            }),
-          ) ?? []
+      const depends =
+        entry['Depends']?.split(', ').map((alternatives: string) =>
+          alternatives.split(' | ').map((alternative) => {
+            const [name] = alternative.split(' ');
+            return name;
+          }),
+        ) ?? [];
 
       const info: Info = {
         name,

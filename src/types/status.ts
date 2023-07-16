@@ -7,21 +7,21 @@ export type Synopsis = string;
 export type EDParagraph = {
   readonly _ED: 'paragraph';
   readonly lines: Array<string>;
-}
+};
 export type EDVerbatim = {
   readonly _ED: 'verbatim';
   readonly lines: Array<string>;
-}
+};
 export type EDBlank = {
   readonly _ED: 'blank';
-}
+};
 export type EDElement = EDParagraph | EDVerbatim | EDBlank;
 
-export type ExtendedDescription = Array<EDElement>
+export type ExtendedDescription = Array<EDElement>;
 
 export type Description = {
-  readonly synopsis: Synopsis,
-  readonly extended: ExtendedDescription,
+  readonly synopsis: Synopsis;
+  readonly extended: ExtendedDescription;
 };
 
 export type Alternatives = Array<Name>;
