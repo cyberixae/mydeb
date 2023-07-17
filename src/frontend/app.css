@@ -1,3 +1,16 @@
+p {
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+h2 {
+  margin: 0;
+}
+
 .App {
   text-align: center;
 }

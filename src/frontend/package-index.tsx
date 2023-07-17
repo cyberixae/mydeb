@@ -28,7 +28,7 @@ export const PackageIndex: React.FC<unknown> = () => {
       {packages
         .sort((a, b) => (a.packageId > b.packageId ? 1 : -1))
         .map((pkg) => (
-          <span id={pkg.packageId}>
+          <span key={pkg.packageId}>
             <a href={`/package/${pkg.packageId}`}>{pkg.packageId}</a>,{' '}
           </span>
         ))}

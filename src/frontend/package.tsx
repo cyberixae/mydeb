@@ -76,18 +76,31 @@ export const Package: React.FC<unknown> = () => {
       <br />
       <div>
         Dependencies:{' '}
-        {pkg.info.dependencies.map((alternatives) =>
-          alternatives.map((id) => {
-            const avail = pkg['available'][id];
-            return <span>{avail ? <a href={`/package/${id}`}>{id}</a> : id}, </span>;
-          }),
-        )}
+        {pkg.info.dependencies.map((alternatives, i1) => (
+          <React.Fragment key={i1}>
+            {i1 > 0 ? ', ' : ''}
+            {alternatives.map((id, i2) => {
+              const avail = pkg['available'][id];
+              return (
+                <span key={i2}>
+                  {i2 > 0 ? ' | ' : ''}
+                  {avail ? <a href={`/package/${id}`}>{id}</a> : id}
+                </span>
+              );
+            })}
+          </React.Fragment>
+        ))}
       </div>
       <br />
       <div>
         Reverse:{' '}
-        {pkg.reverse.map((id) => {
-          return <span>{<a href={`/package/${id}`}>{id}</a>}, </span>;
+        {pkg.reverse.map((id, i) => {
+          return (
+            <span key={i}>
+              {i > 0 ? ', ' : ''}
+              {<a href={`/package/${id}`}>{id}</a>}
+            </span>
+          );
         })}
       </div>
     </div>
