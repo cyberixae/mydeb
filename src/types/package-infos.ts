@@ -1,6 +1,4 @@
-import type {
-  PackageInfo,
-} from './package-info';
+import type { PackageInfo } from './package-info';
 
 import * as Array_ from '../lib/array';
 

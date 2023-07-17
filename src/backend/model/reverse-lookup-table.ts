@@ -1,6 +1,4 @@
-import {
-  PackageId,
-} from '../../types/package-id';
+import { PackageId } from '../../types/package-id';
 import * as Record_ from '../../lib/record';
 import { tuple } from '../../lib/tuple';
 
@@ -8,8 +6,9 @@ import { PackageInfoTable } from './package-info-table';
 
 export type ReverseLookupTable = Record<PackageId, Array<PackageId>>;
 
-export async function fromPackageInfoTable(infos: PackageInfoTable): Promise<ReverseLookupTable> {
-
+export async function fromPackageInfoTable(
+  infos: PackageInfoTable,
+): Promise<ReverseLookupTable> {
   const reverse: ReverseLookupTable = Record_.collectKeyValuePairs(
     Object.values(infos).flatMap((info) =>
       info.dependencies.flatMap((alternatives) =>
@@ -17,5 +16,5 @@ export async function fromPackageInfoTable(infos: PackageInfoTable): Promise<Rev
       ),
     ),
   );
-  return reverse
+  return reverse;
 }

@@ -1,5 +1,4 @@
-
-import type { Struct } from './struct'
+import type { Struct } from './struct';
 
 export type InstallationStatus = boolean;
 

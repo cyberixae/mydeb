@@ -1,5 +1,4 @@
-
-import * as Array_ from '../lib/array';
+import * as Array_ from '../lib/array';
 
 export type StructKey = string;
 export type StructValue = string;
@@ -48,8 +47,6 @@ export async function* fromLinesG(
   }
 }
 
-export async function fromLines(
-  lines: AsyncIterable<string>,
-): Promise<Array<Struct>> {
-  return Array_.fromAsync(fromLinesG(lines))
+export async function fromLines(lines: AsyncIterable<string>): Promise<Array<Struct>> {
+  return Array_.fromAsync(fromLinesG(lines));
 }

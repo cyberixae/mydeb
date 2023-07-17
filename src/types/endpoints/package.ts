@@ -1,6 +1,5 @@
-
-import { PackageId } from '../package-id'
-import { PackageInfo } from '../package-info'
+import { PackageId } from '../package-id';
+import { PackageInfo } from '../package-info';
 
 export type ReverseDeps = Array<PackageId>;
 

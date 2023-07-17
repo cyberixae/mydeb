@@ -1,7 +1,6 @@
+import type { Struct } from './struct';
 
-import type { Struct } from './struct'
-
-export type PackageId = string
+export type PackageId = string;
 
 export function fromStruct(struct: Struct): PackageId {
   const values = struct['Package'];

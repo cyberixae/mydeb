@@ -1,9 +1,6 @@
-import type {
-  PackageId,
-} from './package-id';
+import type { PackageId } from './package-id';
 
-import type { Struct } from './struct'
-
+import type { Struct } from './struct';
 
 export type Alternatives = Array<PackageId>;
 

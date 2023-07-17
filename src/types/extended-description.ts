@@ -1,4 +1,3 @@
-
 export type EDParagraph = {
   readonly _ED: 'paragraph';
   readonly lines: Array<string>;
