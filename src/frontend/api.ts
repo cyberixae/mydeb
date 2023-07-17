@@ -1,4 +1,3 @@
-
 import { PackageId, PackageResponse, PackagesResponse } from '../types/status';
 
 export async function fetchPackages(): Promise<PackagesResponse> {

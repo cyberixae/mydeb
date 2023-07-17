@@ -2,7 +2,7 @@ import React from 'react';
 import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
 import { EDElement, PackageResponse, PackageDetails, PackageId } from '../types/status';
-import { absurd } from '../lib/function'
+import { absurd } from '../lib/function';
 import * as api from './api';
 
 function isPackageId(u: unknown): u is PackageId {
@@ -39,7 +39,9 @@ function useViewData(): ViewData {
 }
 
 export const Package: React.FC<unknown> = () => {
-  const { res: { pkg } } = useViewData();
+  const {
+    res: { pkg },
+  } = useViewData();
 
   return (
     <div>

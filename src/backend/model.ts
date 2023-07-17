@@ -8,18 +8,8 @@ import {
   EDElement,
 } from '../types/status';
 import { Line } from './lib/file';
-
-function collect<K extends string, V>(kvs: Array<[K, V]>): Record<K, Array<V>> {
-  const result: Record<K, Array<V>> = {} as any;
-  for (const kv of kvs) {
-    const [k, v] = kv;
-    if (result.hasOwnProperty(k) === false) {
-      result[k] = [];
-    }
-    result[k].push(v);
-  }
-  return result;
-}
+import * as Record_ from '../lib/record';
+import * as Array_ from '../lib/array';
 
 function* descriptionElements(lines: Array<Line>): Generator<EDElement, void, unknown> {
   let current: EDElement | null = null;
@@ -181,18 +171,10 @@ async function* infosFromLines(
   }
 }
 
-async function fromAsync<T>(iterable: AsyncIterable<T>): Promise<Array<T>> {
-  const values: Array<T> = [];
-  for await (const i of iterable) {
-    values.push(i);
-  }
-  return values;
-}
-
 type PackageInfoTable = Record<PackageId, PackageInfo>;
 
 async function infoTableFromLines(lines: AsyncIterable<Line>): Promise<PackageInfoTable> {
-  const infos = await fromAsync(infosFromLines(lines));
+  const infos = await Array_.fromAsync(infosFromLines(lines));
 
   return Object.fromEntries(
     infos.map((info): [PackageId, PackageInfo] => [info.packageId, info]),
@@ -209,7 +191,7 @@ type Model = {
 export async function model(lines: AsyncIterable<Line>): Promise<Model> {
   const infos = await infoTableFromLines(lines);
 
-  const reverse: ReverseTable = collect(
+  const reverse: ReverseTable = Record_.collectKeyValuePairs(
     Object.values(infos).flatMap((entry) =>
       entry.dependencies.flatMap((alts) =>
         alts.map((alt: PackageId): [PackageId, PackageId] => [alt, entry.packageId]),
