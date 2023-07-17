@@ -1,6 +1,4 @@
-export type Name = string;
-
-export type Status = string;
+export type PackageId = string;
 
 export type Synopsis = string;
 
@@ -24,13 +22,15 @@ export type Description = {
   readonly extended: ExtendedDescription;
 };
 
-export type Alternatives = Array<Name>;
+export type Alternatives = Array<PackageId>;
 
 export type Dependencies = Array<Alternatives>;
 
-export type Info = {
-  readonly name: Name;
-  readonly status: Status;
+export type InstallationStatus = boolean;
+
+export type PackageInfo = {
+  readonly packageId: PackageId;
   readonly description: Description;
-  readonly depends: Dependencies;
+  readonly dependencies: Dependencies;
+  readonly installationStatus: InstallationStatus;
 };

@@ -3,10 +3,10 @@ import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
 import {
-  Status,
+  InstallationStatus,
   Dependencies,
-  Name,
-  Info,
+  PackageId,
+  PackageInfo,
   Description,
   EDElement,
 } from '../types/status';
@@ -126,7 +126,7 @@ async function* structsFromLines(
   }
 }
 
-function nameFromStruct(struct: Struct): Name {
+function packageIdFromStruct(struct: Struct): PackageId {
   const values = struct['Package'];
   if (values.length === 1) {
     const [value] = values;
@@ -135,11 +135,11 @@ function nameFromStruct(struct: Struct): Name {
   throw new Error('Unexpected multiline Package field');
 }
 
-function statusFromStruct(struct: Struct): Status {
+function installationStatusFromStruct(struct: Struct): InstallationStatus {
   const values = struct['Status'];
   if (values.length === 1) {
     const [value] = values;
-    return value;
+    return value.endsWith(' installed');
   }
   throw new Error('Unexpected multiline Status field');
 }
@@ -153,7 +153,7 @@ function descriptionFromStruct(struct: Struct): Description {
   };
 }
 
-function dependsFromStruct(struct: Struct): Dependencies {
+function dependenciesFromStruct(struct: Struct): Dependencies {
   const values = struct['Depends'];
   if (typeof values === 'undefined') {
     return [];
@@ -172,13 +172,13 @@ function dependsFromStruct(struct: Struct): Dependencies {
 
 async function* infosFromLines(
   lines: AsyncIterable<string>,
-): AsyncGenerator<Info, void, unknown> {
+): AsyncGenerator<PackageInfo, void, unknown> {
   for await (const struct of structsFromLines(lines)) {
-    const info: Info = {
-      name: nameFromStruct(struct),
-      status: statusFromStruct(struct),
+    const info: PackageInfo = {
+      packageId: packageIdFromStruct(struct),
       description: descriptionFromStruct(struct),
-      depends: dependsFromStruct(struct),
+      dependencies: dependenciesFromStruct(struct),
+      installationStatus: installationStatusFromStruct(struct),
     };
     yield info;
   }
@@ -192,18 +192,20 @@ async function fromAsync<T>(iterable: AsyncIterable<T>): Promise<Array<T>> {
   return values;
 }
 
-type InfoTable = Record<Name, Info>;
+type PackageInfoTable = Record<PackageId, PackageInfo>;
 
-async function infoTableFromLines(lines: AsyncIterable<Line>): Promise<InfoTable> {
+async function infoTableFromLines(lines: AsyncIterable<Line>): Promise<PackageInfoTable> {
   const infos = await fromAsync(infosFromLines(lines));
 
-  return Object.fromEntries(infos.map((info): [Name, Info] => [info.name, info]));
+  return Object.fromEntries(
+    infos.map((info): [PackageId, PackageInfo] => [info.packageId, info]),
+  );
 }
 
-type ReverseTable = Record<Name, Array<Name>>;
+type ReverseTable = Record<PackageId, Array<PackageId>>;
 
 type Model = {
-  infos: InfoTable;
+  infos: PackageInfoTable;
   reverse: ReverseTable;
 };
 
@@ -214,8 +216,8 @@ async function model(lines: AsyncIterable<Line>): Promise<Model> {
 
   const reverse: ReverseTable = collect(
     Object.values(infos).flatMap((entry) =>
-      entry.depends.flatMap((alts) =>
-        alts.map((alt: string): [string, string] => [alt, entry.name]),
+      entry.dependencies.flatMap((alts) =>
+        alts.map((alt: string): [string, string] => [alt, entry.packageId]),
       ),
     ),
   );
@@ -250,7 +252,7 @@ async function main() {
     const entry = {
       info,
       available: Object.fromEntries(
-        info.depends.flat().map((name) => {
+        info.dependencies.flat().map((name) => {
           return [name, m.infos.hasOwnProperty(name)];
         }),
       ),
