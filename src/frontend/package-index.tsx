@@ -2,15 +2,10 @@ import React from 'react';
 import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
 import { PackagesResponse } from '../types/status';
-
-async function fetchPackages(): Promise<unknown> {
-  const url = `/api/package`;
-  const res = await fetch(url);
-  return res.json();
-}
+import * as api from './api';
 
 export const packageIndexLoader: LoaderFunction = async function (_args) {
-  const res = await fetchPackages();
+  const res = await api.fetchPackages();
   return { res };
 };
 

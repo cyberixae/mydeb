@@ -2,19 +2,11 @@ import React from 'react';
 import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
 import { EDElement, PackageResponse, PackageDetails, PackageId } from '../types/status';
-
-function absurdElement(_elem: never): never {
-  throw new Error('absurd element');
-}
+import { absurd } from '../lib/function'
+import * as api from './api';
 
 function isPackageId(u: unknown): u is PackageId {
   return typeof u === 'string';
-}
-
-async function fetchPackage(packageId: PackageId): Promise<PackageResponse> {
-  const url = `/api/package/${packageId}`;
-  const res = await fetch(url);
-  return res.json();
 }
 
 type ViewParams = {
@@ -32,7 +24,7 @@ function parseParams(params: Params): ViewParams {
 export const packageLoader: LoaderFunction = async function (args) {
   const { packageId } = parseParams(args.params);
 
-  const res = await fetchPackage(packageId);
+  const res = await api.fetchPackage(packageId);
 
   return {
     res,
@@ -72,7 +64,7 @@ export const Package: React.FC<unknown> = () => {
               if (elem._ED === 'paragraph') {
                 return <p>{elem.lines.join('\n')}</p>;
               }
-              return absurdElement(elem);
+              return absurd(elem, 'absurd description element');
             })()}
           </React.Fragment>
         ))}
