@@ -7,17 +7,17 @@ function absurdElement(elem: never): never {
   throw new Error('absurd element');
 }
 
-export async function debLoader({ params }: any) {
+export async function packageLoader({ params }: any) {
   const url = `/api/package/${params.packageId}`;
   const res = await fetch(url);
-  const deb = await res.json();
-  return { deb };
+  const pkg = await res.json();
+  return { pkg };
 }
 
-export function Deb() {
-  const { deb }: any = useLoaderData();
+export function Package() {
+  const { pkg }: any = useLoaderData();
 
-  console.log(deb);
+  console.log(pkg);
 
   return (
     <div>
@@ -25,12 +25,12 @@ export function Deb() {
         <a href="/">MyDeb</a>
       </h1>
       <br />
-      <h2>{deb.info.name}</h2>
+      <h2>{pkg.info.name}</h2>
       <br />
-      <div>{deb.info.description.synopsis}</div>
+      <div>{pkg.info.description.synopsis}</div>
       <br />
       <div>
-        {deb.info.description.extended.map((elem: EDElement, i: number) => (
+        {pkg.info.description.extended.map((elem: EDElement, i: number) => (
           <React.Fragment key={i}>
             {(() => {
               if (elem._ED === 'blank') {
@@ -50,9 +50,9 @@ export function Deb() {
       <br />
       <div>
         Dependencies:{' '}
-        {deb.info.depends.map((alternatives: Array<string>) =>
+        {pkg.info.depends.map((alternatives: Array<string>) =>
           alternatives.map((name) => {
-            const avail = deb['available'][name];
+            const avail = pkg['available'][name];
             return (
               <span>{avail ? <a href={`/package/${name}`}>{name}</a> : name}, </span>
             );
@@ -62,7 +62,7 @@ export function Deb() {
       <br />
       <div>
         Reverse:{' '}
-        {deb.reverse.map((name: string) => {
+        {pkg.reverse.map((name: string) => {
           return <span>{<a href={`/package/${name}`}>{name}</a>}, </span>;
         })}
       </div>

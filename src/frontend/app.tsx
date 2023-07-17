@@ -2,19 +2,19 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Hello } from './hello';
-import { Deb, debLoader } from './deb';
-import { DebIndex, debIndexLoader } from './deb-index';
+import { Package, packageLoader } from './package';
+import { PackageIndex, packageIndexLoader } from './package-index';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <DebIndex />,
-    loader: debIndexLoader,
+    element: <PackageIndex />,
+    loader: packageIndexLoader,
   },
   {
     path: 'package/:packageId',
-    element: <Deb />,
-    loader: debLoader,
+    element: <Package />,
+    loader: packageLoader,
   },
 ]);
 
