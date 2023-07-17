@@ -34,3 +34,17 @@ export type PackageInfo = {
   readonly dependencies: Dependencies;
   readonly installationStatus: InstallationStatus;
 };
+export type ReverseDeps = Array<PackageId>;
+
+export type IsAvailable = boolean;
+export type DepAvailability = Record<PackageId, IsAvailable>;
+
+export type PackageResponse = {
+  readonly info: PackageInfo;
+  readonly reverse: ReverseDeps;
+  readonly available: DepAvailability;
+};
+
+export type PackagesResponse = {
+  readonly packages: Array<PackageInfo>;
+};

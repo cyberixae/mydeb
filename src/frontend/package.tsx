@@ -1,22 +1,28 @@
 import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 import './app.css';
-import { EDElement } from '../types/status';
+import { EDElement, PackageInfo } from '../types/status';
 
 function absurdElement(elem: never): never {
   throw new Error('absurd element');
 }
 
-export async function packageLoader({ params }: any) {
+export async function packageLoader({ params }: any): Promise<unknown> {
   const url = `/api/package/${params.packageId}`;
   const res = await fetch(url);
   const pkg = await res.json();
   return { pkg };
 }
 
-export function Package() {
+type ViewData = {
+  pkg: PackageInfo;
+};
+function useViewData(): ViewData {
   const { pkg }: any = useLoaderData();
+}
 
+export const Package: React.FC<unknown> = () => {
+  const { pkg } = useViewData();
   console.log(pkg);
 
   return (
@@ -51,21 +57,19 @@ export function Package() {
       <div>
         Dependencies:{' '}
         {pkg.info.depends.map((alternatives: Array<string>) =>
-          alternatives.map((name) => {
-            const avail = pkg['available'][name];
-            return (
-              <span>{avail ? <a href={`/package/${name}`}>{name}</a> : name}, </span>
-            );
+          alternatives.map((id) => {
+            const avail = pkg['available'][id];
+            return <span>{avail ? <a href={`/package/${id}`}>{id}</a> : id}, </span>;
           }),
         )}
       </div>
       <br />
       <div>
         Reverse:{' '}
-        {pkg.reverse.map((name: string) => {
-          return <span>{<a href={`/package/${name}`}>{name}</a>}, </span>;
+        {pkg.reverse.map((id) => {
+          return <span>{<a href={`/package/${id}`}>{id}</a>}, </span>;
         })}
       </div>
     </div>
   );
-}
+};

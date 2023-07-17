@@ -4,10 +4,14 @@ import readline from 'readline';
 import path from 'path';
 import {
   InstallationStatus,
+  DepAvailability,
+  Alternatives,
   Dependencies,
   PackageId,
   PackageInfo,
   Description,
+  PackageResponse,
+  PackagesResponse,
   EDElement,
 } from '../types/status';
 
@@ -25,7 +29,7 @@ function collect<K extends string, V>(kvs: Array<[K, V]>): Record<K, Array<V>> {
   return result;
 }
 
-function* descriptionElements(lines: Array<string>): Generator<EDElement, void, unknown> {
+function* descriptionElements(lines: Array<Line>): Generator<EDElement, void, unknown> {
   let current: EDElement | null = null;
   for (const line of lines) {
     if (line === ' .') {
@@ -83,7 +87,7 @@ type StructKey = string;
 type StructValue = string;
 type Struct = Record<StructKey, Array<StructValue>>;
 
-function readStructKeyValue(line: string): [StructKey, StructValue] {
+function readStructKeyValue(line: Line): [StructKey, StructValue] {
   const [k, v] = line.split(': ');
   if (typeof k !== 'string') {
     throw new Error('Invalid struct key');
@@ -92,7 +96,7 @@ function readStructKeyValue(line: string): [StructKey, StructValue] {
 }
 
 async function* structsFromLines(
-  lines: AsyncIterable<string>,
+  lines: AsyncIterable<Line>,
 ): AsyncGenerator<Struct, void, unknown> {
   let current: Struct | null = null;
   let key: StructKey | null = null;
@@ -160,18 +164,19 @@ function dependenciesFromStruct(struct: Struct): Dependencies {
   }
   if (values.length === 1) {
     const [value] = values;
-    return value.split(', ').map((alternatives: string) =>
-      alternatives.split(' | ').map((alternative) => {
-        const [name] = alternative.split(' ');
-        return name;
-      }),
+    return value.split(', ').map(
+      (rawAlternatives): Alternatives =>
+        rawAlternatives.split(' | ').map((alternative): PackageId => {
+          const [packageId] = alternative.split(' ');
+          return packageId;
+        }),
     );
   }
   throw new Error('Unexpected multiline Depends field');
 }
 
 async function* infosFromLines(
-  lines: AsyncIterable<string>,
+  lines: AsyncIterable<Line>,
 ): AsyncGenerator<PackageInfo, void, unknown> {
   for await (const struct of structsFromLines(lines)) {
     const info: PackageInfo = {
@@ -217,7 +222,7 @@ async function model(lines: AsyncIterable<Line>): Promise<Model> {
   const reverse: ReverseTable = collect(
     Object.values(infos).flatMap((entry) =>
       entry.dependencies.flatMap((alts) =>
-        alts.map((alt: string): [string, string] => [alt, entry.packageId]),
+        alts.map((alt: PackageId): [PackageId, PackageId] => [alt, entry.packageId]),
       ),
     ),
   );
@@ -227,44 +232,50 @@ async function model(lines: AsyncIterable<Line>): Promise<Model> {
   };
 }
 
-async function main() {
-  const file = path.join(__dirname, '../../private/status.real');
-
-  const input = fs.createReadStream(file);
+function linesFromFile(filePath: FilePath): AsyncIterable<Line> {
+  const input = fs.createReadStream(filePath);
 
   const lines = readline.createInterface({
     input,
     crlfDelay: Infinity,
   });
 
+  return lines;
+}
+
+type Port = number;
+
+async function main(port: Port, filePath: FilePath): Promise<void> {
+  const lines = linesFromFile(filePath);
+
   const m = await model(lines);
 
   const app = express();
-  const port = 3001;
-
-  app.get('/api', (req: unknown, res: any) => {
-    res.send('Hello World!');
-  });
 
   app.get('/api/package/:packageId', (req: any, res: any) => {
     const { packageId } = req.params;
     const info = m.infos[packageId];
-    const entry = {
+
+    const available: DepAvailability = Object.fromEntries(
+      info.dependencies.flat().map((packageId) => {
+        return [packageId, m.infos.hasOwnProperty(packageId)];
+      }),
+    );
+
+    const response: PackageResponse = {
       info,
-      available: Object.fromEntries(
-        info.dependencies.flat().map((name) => {
-          return [name, m.infos.hasOwnProperty(name)];
-        }),
-      ),
+      available,
       reverse: m.reverse[packageId] ?? [],
     };
-    res.send(entry);
+    res.send(response);
   });
 
   app.get('/api/package', (req: unknown, res: any) => {
-    const entries = Object.values(m.infos);
-    const installed = entries.filter((info: any) => info.status.endsWith(' installed'));
-    res.send(installed);
+    const entries: Array<PackageInfo> = Object.values(m.infos);
+    const response: PackagesResponse = {
+      packages: entries.filter((info: PackageInfo) => info.installationStatus),
+    };
+    res.send(response);
   });
 
   app.listen(port, () => {
@@ -272,6 +283,8 @@ async function main() {
   });
 }
 
-main();
+const file = path.join(__dirname, '../../private/status.real');
+
+main(3001, file);
 
 export {};
