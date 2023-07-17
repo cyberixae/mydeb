@@ -32,23 +32,22 @@ function parseParams(params: Params): ViewParams {
 export const packageLoader: LoaderFunction = async function (args) {
   const { packageId } = parseParams(args.params);
 
-  const { pkg } = await fetchPackage(packageId);
+  const res = await fetchPackage(packageId);
 
   return {
-    pkg,
+    res,
   };
 };
 
 type ViewData = {
-  pkg: PackageDetails;
+  res: PackageResponse;
 };
 function useViewData(): ViewData {
   return useLoaderData() as any;
 }
 
 export const Package: React.FC<unknown> = () => {
-  const { pkg } = useViewData();
-  console.log(pkg);
+  const { res: { pkg } } = useViewData();
 
   return (
     <div>
