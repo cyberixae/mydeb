@@ -1,7 +1,14 @@
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import { Name, Info, Description, EDElement } from '../types/status';
+import {
+  Status,
+  Dependencies,
+  Name,
+  Info,
+  Description,
+  EDElement,
+} from '../types/status';
 
 function collect<K extends string, V>(kvs: Array<[K, V]>): Record<K, Array<V>> {
   const result: Record<K, Array<V>> = {} as any;
@@ -69,50 +76,114 @@ function* descriptionElements(lines: Array<string>): Generator<EDElement, void, 
   }
 }
 
-async function main() {
-  const TAG = 'NEXT';
+type StructKey = string;
+type StructValue = string;
+type Struct = Record<StructKey, Array<StructValue>>;
 
+function readStructKeyValue(line: string): [StructKey, StructValue] {
+  const [k, v] = line.split(': ');
+  if (typeof k !== 'string') {
+    throw new Error('Invalid struct key');
+  }
+  return [k, v ?? String()];
+}
+
+function* structsFromLines(lines: Array<string>): Generator<Struct, void, unknown> {
+  let current: Struct | null = null;
+  let key: StructKey | null = null;
+  for (const line of lines) {
+    if (line === String()) {
+      if (current !== null) {
+        yield current;
+        current = null;
+      }
+      continue;
+    }
+    if (current === null) {
+      current = {};
+    }
+    if (key === null) {
+      if (line.startsWith(' ')) {
+        throw new Error('Invalid struct');
+      }
+      const [k, v] = readStructKeyValue(line);
+      key = k;
+      current[key] = [v];
+      continue;
+    }
+    if (line.startsWith(' ')) {
+      current[key].push(line);
+      continue;
+    }
+    const [k, v] = readStructKeyValue(line);
+    key = k;
+    current[key] = [v];
+  }
+}
+
+function nameFromStruct(struct: Struct): Name {
+  const values = struct['Package'];
+  if (values.length === 1) {
+    const [value] = values;
+    return value;
+  }
+  throw new Error('Unexpected multiline Package field');
+}
+
+function statusFromStruct(struct: Struct): Status {
+  const values = struct['Status'];
+  if (values.length === 1) {
+    const [value] = values;
+    return value;
+  }
+  throw new Error('Unexpected multiline Status field');
+}
+
+function descriptionFromStruct(struct: Struct): Description {
+  const [synopsis, ...ext] = struct['Description'];
+  const extended = Array.from(descriptionElements(ext));
+  return {
+    synopsis,
+    extended,
+  };
+}
+
+function dependsFromStruct(struct: Struct): Dependencies {
+  const values = struct['Depends'];
+  if (typeof values === 'undefined') {
+    return [];
+  }
+  if (values.length === 1) {
+    const [value] = values;
+    return value.split(', ').map((alternatives: string) =>
+      alternatives.split(' | ').map((alternative) => {
+        const [name] = alternative.split(' ');
+        return name;
+      }),
+    );
+  }
+  throw new Error('Unexpected multiline Depends field');
+}
+
+function* infosFromLines(lines: Array<string>): Generator<Info, void, unknown> {
+  for (const struct of structsFromLines(lines)) {
+    const info: Info = {
+      name: nameFromStruct(struct),
+      status: statusFromStruct(struct),
+      description: descriptionFromStruct(struct),
+      depends: dependsFromStruct(struct),
+    };
+    yield info;
+  }
+}
+
+async function main() {
   const file = path.join(__dirname, '../../private/status.real');
   const data = await fs.readFile(file, 'utf-8');
+  const lines = data.split('\n');
+  const infos = Array.from(infosFromLines(lines));
 
-  const rawEntries = data.split('\n\n');
-  const db = Object.fromEntries(
-    rawEntries.flatMap((rawEntry): Array<[Name, Info]> => {
-      const rawLines = rawEntry.split('\n ').join(TAG.concat(' ')).split('\n');
-      const entries = rawLines.map((rawLine) => rawLine.split(': '));
-      const entry = Object.fromEntries(entries);
-      const name = entry['Package'];
-
-      if (typeof name === 'undefined') {
-        return [];
-      }
-
-      const status = entry['Status'];
-
-      const [synopsis, ...ext] = entry['Description'].split(TAG);
-
-      const description: Description = {
-        synopsis,
-        extended: Array.from(descriptionElements(ext)),
-      };
-
-      const depends =
-        entry['Depends']?.split(', ').map((alternatives: string) =>
-          alternatives.split(' | ').map((alternative) => {
-            const [name] = alternative.split(' ');
-            return name;
-          }),
-        ) ?? [];
-
-      const info: Info = {
-        name,
-        status,
-        description,
-        depends,
-      };
-      return [[info.name, info]];
-    }),
-  );
+  const db = Object.fromEntries(infos.map((info): [Name, Info] => [info.name, info]));
 
   const reverse = collect(
     Object.values(db).flatMap((entry) =>
