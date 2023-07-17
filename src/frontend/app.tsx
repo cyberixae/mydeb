@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Hello } from './hello';
 import { Package, packageLoader } from './package';
 import { PackageIndex, packageIndexLoader } from './package-index';
 
