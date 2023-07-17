@@ -39,10 +39,14 @@ export type ReverseDeps = Array<PackageId>;
 export type IsAvailable = boolean;
 export type DepAvailability = Record<PackageId, IsAvailable>;
 
-export type PackageResponse = {
+export type PackageDetails = {
   readonly info: PackageInfo;
   readonly reverse: ReverseDeps;
   readonly available: DepAvailability;
+};
+
+export type PackageResponse = {
+  readonly pkg: PackageDetails;
 };
 
 export type PackagesResponse = {

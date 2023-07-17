@@ -1,16 +1,30 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
+import { PackagesResponse } from '../types/status';
 
-export async function packageIndexLoader({ params }: any) {
+async function fetchPackages(): Promise<unknown> {
   const url = `/api/package`;
   const res = await fetch(url);
-  const packages = await res.json();
-  return { packages };
+  return res.json();
 }
 
-export function PackageIndex({}: any) {
-  const { packages }: any = useLoaderData();
+export const packageIndexLoader: LoaderFunction = async function (_args) {
+  const packages = await fetchPackages();
+  return { packages };
+};
+
+type ViewData = {
+  res: PackagesResponse;
+};
+function useViewData(): ViewData {
+  return useLoaderData() as any;
+}
+
+export const PackageIndex: React.FC<unknown> = () => {
+  const {
+    res: { packages },
+  } = useViewData();
   console.log(packages);
 
   return (
@@ -26,4 +40,4 @@ export function PackageIndex({}: any) {
         ))}
     </div>
   );
-}
+};

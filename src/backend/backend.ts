@@ -1,4 +1,6 @@
 import express from 'express';
+import type { Request, Response } from 'express';
+
 import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
@@ -252,7 +254,7 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
 
   const app = express();
 
-  app.get('/api/package/:packageId', (req: any, res: any) => {
+  app.get('/api/package/:packageId', (req: Request, res: Response) => {
     const { packageId } = req.params;
     const info = m.infos[packageId];
 
@@ -263,14 +265,16 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
     );
 
     const response: PackageResponse = {
-      info,
-      available,
-      reverse: m.reverse[packageId] ?? [],
+      pkg: {
+        info,
+        available,
+        reverse: m.reverse[packageId] ?? [],
+      },
     };
     res.send(response);
   });
 
-  app.get('/api/package', (req: unknown, res: any) => {
+  app.get('/api/package', (_req: Request, res: Response) => {
     const entries: Array<PackageInfo> = Object.values(m.infos);
     const response: PackagesResponse = {
       packages: entries.filter((info: PackageInfo) => info.installationStatus),

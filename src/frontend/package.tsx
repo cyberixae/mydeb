@@ -1,24 +1,49 @@
 import React from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
-import { EDElement, PackageInfo } from '../types/status';
+import { EDElement, PackageResponse, PackageDetails, PackageId } from '../types/status';
 
-function absurdElement(elem: never): never {
+function absurdElement(_elem: never): never {
   throw new Error('absurd element');
 }
 
-export async function packageLoader({ params }: any): Promise<unknown> {
-  const url = `/api/package/${params.packageId}`;
-  const res = await fetch(url);
-  const pkg = await res.json();
-  return { pkg };
+function isPackageId(u: unknown): u is PackageId {
+  return typeof u === 'string';
 }
 
+async function fetchPackage(packageId: PackageId): Promise<PackageResponse> {
+  const url = `/api/package/${packageId}`;
+  const res = await fetch(url);
+  return res.json();
+}
+
+type ViewParams = {
+  packageId: PackageId;
+};
+
+function parseParams(params: Params): ViewParams {
+  const { packageId } = params;
+  if (isPackageId(packageId)) {
+    return { packageId };
+  }
+  throw new Error('Invalid args');
+}
+
+export const packageLoader: LoaderFunction = async function (args) {
+  const { packageId } = parseParams(args.params);
+
+  const { pkg } = await fetchPackage(packageId);
+
+  return {
+    pkg,
+  };
+};
+
 type ViewData = {
-  pkg: PackageInfo;
+  pkg: PackageDetails;
 };
 function useViewData(): ViewData {
-  const { pkg }: any = useLoaderData();
+  return useLoaderData() as any;
 }
 
 export const Package: React.FC<unknown> = () => {
@@ -31,7 +56,7 @@ export const Package: React.FC<unknown> = () => {
         <a href="/">MyDeb</a>
       </h1>
       <br />
-      <h2>{pkg.info.name}</h2>
+      <h2>{pkg.info.packageId}</h2>
       <br />
       <div>{pkg.info.description.synopsis}</div>
       <br />
@@ -56,7 +81,7 @@ export const Package: React.FC<unknown> = () => {
       <br />
       <div>
         Dependencies:{' '}
-        {pkg.info.depends.map((alternatives: Array<string>) =>
+        {pkg.info.dependencies.map((alternatives) =>
           alternatives.map((id) => {
             const avail = pkg['available'][id];
             return <span>{avail ? <a href={`/package/${id}`}>{id}</a> : id}, </span>;
