@@ -4,10 +4,12 @@ import type { Request, Response } from 'express';
 import path from 'path';
 import {
   DepAvailability,
-  PackageInfo,
   PackageResponse,
   PackagesResponse,
 } from '../types/status';
+import {
+  PackageInfo,
+} from '../types/package-info';
 import { model } from './model';
 import { FilePath, read } from './lib/file';
 
