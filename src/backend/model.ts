@@ -6,7 +6,6 @@ import {
 } from '../types/package-info';
 import { Line } from './lib/file';
 import * as Record_ from '../lib/record';
-import * as Array_ from '../lib/array';
 import * as PackageInfos_ from '../types/package-infos';
 
 type PackageInfoTable = Record<PackageId, PackageInfo>;

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
+import { useLoaderData, LoaderFunction } from 'react-router-dom';
 import './app.css';
-import { PackagesResponse } from '../types/status';
+import { PackagePluralResponse } from '../types/endpoints/package-plural';
 import * as api from './api';
 
 export const packageIndexLoader: LoaderFunction = async function (_args) {
@@ -10,7 +10,7 @@ export const packageIndexLoader: LoaderFunction = async function (_args) {
 };
 
 type ViewData = {
-  res: PackagesResponse;
+  res: PackagePluralResponse;
 };
 function useViewData(): ViewData {
   return useLoaderData() as any;

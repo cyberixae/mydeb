@@ -5,8 +5,10 @@ import path from 'path';
 import {
   DepAvailability,
   PackageResponse,
-  PackagesResponse,
-} from '../types/status';
+} from '../types/endpoints/package';
+import {
+  PackagePluralResponse,
+} from '../types/endpoints/package-plural';
 import {
   PackageInfo,
 } from '../types/package-info';
@@ -44,7 +46,7 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
 
   app.get('/api/package', (_req: Request, res: Response) => {
     const entries: Array<PackageInfo> = Object.values(db.infos);
-    const response: PackagesResponse = {
+    const response: PackagePluralResponse = {
       packages: entries.filter((info: PackageInfo) => info.installationStatus),
     };
     res.send(response);

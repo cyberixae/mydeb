@@ -1,6 +1,8 @@
-import { PackageId, PackageResponse, PackagesResponse } from '../types/status';
+import type { PackageId } from '../types/package-id';
+import { PackageResponse } from '../types/endpoints/package';
+import { PackagePluralResponse } from '../types/endpoints/package-plural';
 
-export async function fetchPackages(): Promise<PackagesResponse> {
+export async function fetchPackages(): Promise<PackagePluralResponse> {
   const url = `/api/package`;
   const res = await fetch(url);
   return res.json();

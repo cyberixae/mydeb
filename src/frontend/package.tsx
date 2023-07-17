@@ -1,7 +1,9 @@
 import React from 'react';
 import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
-import { EDElement, PackageResponse, PackageDetails, PackageId } from '../types/status';
+import type { EDElement } from '../types/extended-description';
+import type { PackageId } from '../types/package-id';
+import type { PackageResponse } from '../types/endpoints/package';
 import { absurd } from '../lib/function';
 import * as api from './api';
 

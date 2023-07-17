@@ -1,6 +1,6 @@
-import { ExtendedDescription } from './extended-description';
 
-import { PackageId } from './package-id'
+import { PackageId } from '../package-id'
+import { PackageInfo } from '../package-info'
 
 export type ReverseDeps = Array<PackageId>;
 
@@ -15,8 +15,4 @@ export type PackageDetails = {
 
 export type PackageResponse = {
   readonly pkg: PackageDetails;
-};
-
-export type PackagesResponse = {
-  readonly packages: Array<PackageInfo>;
 };

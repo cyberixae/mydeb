@@ -13,7 +13,7 @@ import * as InstallationStatus_ from './installation-status';
 export async function* fromLinesG(
   lines: AsyncIterable<string>,
 ): AsyncGenerator<PackageInfo, void, unknown> {
-  for await (const struct of Struct_.fromLines(lines)) {
+  for await (const struct of Struct_.fromLinesG(lines)) {
     const info: PackageInfo = {
       packageId: PackageId_.fromStruct(struct),
       description: Description_.fromStruct(struct),
