@@ -12,7 +12,7 @@ import {
 import {
   PackageInfo,
 } from '../types/package-info';
-import { model } from './model';
+import { model } from './model/model';
 import { FilePath, read } from './lib/file';
 
 type Port = number;
