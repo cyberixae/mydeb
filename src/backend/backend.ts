@@ -1,5 +1,6 @@
 import express from 'express';
-import fs from 'fs/promises';
+import fs from 'fs';
+import readline from 'readline';
 import path from 'path';
 import {
   Status,
@@ -9,6 +10,8 @@ import {
   Description,
   EDElement,
 } from '../types/status';
+
+type Line = string;
 
 function collect<K extends string, V>(kvs: Array<[K, V]>): Record<K, Array<V>> {
   const result: Record<K, Array<V>> = {} as any;
@@ -88,10 +91,12 @@ function readStructKeyValue(line: string): [StructKey, StructValue] {
   return [k, v ?? String()];
 }
 
-function* structsFromLines(lines: Array<string>): Generator<Struct, void, unknown> {
+async function* structsFromLines(
+  lines: AsyncIterable<string>,
+): AsyncGenerator<Struct, void, unknown> {
   let current: Struct | null = null;
   let key: StructKey | null = null;
-  for (const line of lines) {
+  for await (const line of lines) {
     if (line === String()) {
       if (current !== null) {
         yield current;
@@ -165,8 +170,10 @@ function dependsFromStruct(struct: Struct): Dependencies {
   throw new Error('Unexpected multiline Depends field');
 }
 
-function* infosFromLines(lines: Array<string>): Generator<Info, void, unknown> {
-  for (const struct of structsFromLines(lines)) {
+async function* infosFromLines(
+  lines: AsyncIterable<string>,
+): AsyncGenerator<Info, void, unknown> {
+  for await (const struct of structsFromLines(lines)) {
     const info: Info = {
       name: nameFromStruct(struct),
       status: statusFromStruct(struct),
@@ -177,21 +184,58 @@ function* infosFromLines(lines: Array<string>): Generator<Info, void, unknown> {
   }
 }
 
-async function main() {
-  const file = path.join(__dirname, '../../private/status.real');
-  const data = await fs.readFile(file, 'utf-8');
-  const lines = data.split('\n');
-  const infos = Array.from(infosFromLines(lines));
+async function fromAsync<T>(iterable: AsyncIterable<T>): Promise<Array<T>> {
+  const values: Array<T> = [];
+  for await (const i of iterable) {
+    values.push(i);
+  }
+  return values;
+}
 
-  const db = Object.fromEntries(infos.map((info): [Name, Info] => [info.name, info]));
+type InfoTable = Record<Name, Info>;
 
-  const reverse = collect(
-    Object.values(db).flatMap((entry) =>
+async function infoTableFromLines(lines: AsyncIterable<Line>): Promise<InfoTable> {
+  const infos = await fromAsync(infosFromLines(lines));
+
+  return Object.fromEntries(infos.map((info): [Name, Info] => [info.name, info]));
+}
+
+type ReverseTable = Record<Name, Array<Name>>;
+
+type Model = {
+  infos: InfoTable;
+  reverse: ReverseTable;
+};
+
+type FilePath = string;
+
+async function model(lines: AsyncIterable<Line>): Promise<Model> {
+  const infos = await infoTableFromLines(lines);
+
+  const reverse: ReverseTable = collect(
+    Object.values(infos).flatMap((entry) =>
       entry.depends.flatMap((alts) =>
         alts.map((alt: string): [string, string] => [alt, entry.name]),
       ),
     ),
   );
+  return {
+    infos,
+    reverse,
+  };
+}
+
+async function main() {
+  const file = path.join(__dirname, '../../private/status.real');
+
+  const input = fs.createReadStream(file);
+
+  const lines = readline.createInterface({
+    input,
+    crlfDelay: Infinity,
+  });
+
+  const m = await model(lines);
 
   const app = express();
   const port = 3001;
@@ -202,21 +246,21 @@ async function main() {
 
   app.get('/api/package/:packageId', (req: any, res: any) => {
     const { packageId } = req.params;
-    const info = db[packageId];
+    const info = m.infos[packageId];
     const entry = {
       info,
       available: Object.fromEntries(
         info.depends.flat().map((name) => {
-          return [name, db.hasOwnProperty(name)];
+          return [name, m.infos.hasOwnProperty(name)];
         }),
       ),
-      reverse: reverse[packageId] ?? [],
+      reverse: m.reverse[packageId] ?? [],
     };
     res.send(entry);
   });
 
   app.get('/api/package', (req: unknown, res: any) => {
-    const entries = Object.values(db);
+    const entries = Object.values(m.infos);
     const installed = entries.filter((info: any) => info.status.endsWith(' installed'));
     res.send(installed);
   });
