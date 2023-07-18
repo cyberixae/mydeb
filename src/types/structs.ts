@@ -1,4 +1,3 @@
-import type { NonEmptyArray } from '../lib/non-empty-array';
 
 import * as Array_ from '../lib/array';
 
