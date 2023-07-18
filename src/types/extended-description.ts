@@ -6,50 +6,50 @@ const asciiArt = `
    * * *
 `.split('\n');
 
-export type EDParagraph = {
+export type Paragraph = {
   readonly _ED: 'paragraph';
   readonly lines: Array<string>;
 };
-export const paragraph = (...lines: Array<string>): EDParagraph => ({
+export const paragraph = (...lines: Array<string>): Paragraph => ({
   _ED: 'paragraph',
   lines,
 });
-export const examplesEDParagraph: NonEmptyArray<EDParagraph> = [
+export const examplesParagraph: NonEmptyArray<Paragraph> = [
   {
     _ED: 'paragraph',
     lines: ['it is indeed cool', 'maybe the best package ever'],
   },
 ];
 
-export type EDVerbatim = {
+export type Verbatim = {
   readonly _ED: 'verbatim';
   readonly lines: Array<string>;
 };
-export const verbatim = (...lines: Array<string>): EDVerbatim => ({
+export const verbatim = (...lines: Array<string>): Verbatim => ({
   _ED: 'verbatim',
   lines,
 });
-export const examplesEDVerbatim: NonEmptyArray<EDVerbatim> = [
+export const examplesVerbatim: NonEmptyArray<Verbatim> = [
   {
     _ED: 'verbatim',
     lines: asciiArt,
   },
 ];
 
-export type EDBlank = {
+export type Blank = {
   readonly _ED: 'blank';
 };
-export const blank: EDBlank = {
+export const blank: Blank = {
   _ED: 'blank',
 };
-export const examplesEDBlank: NonEmptyArray<EDBlank> = [
+export const examplesBlank: NonEmptyArray<Blank> = [
   {
     _ED: 'blank',
   },
 ];
 
-export type EDElement = EDParagraph | EDVerbatim | EDBlank;
-export const examplesEDElement: NonEmptyArray<EDElement> = [
+export type Item = Paragraph | Verbatim | Blank;
+export const examplesItem: NonEmptyArray<Item> = [
   {
     _ED: 'paragraph',
     lines: ['it is indeed cool', 'maybe the best package ever'],
@@ -63,7 +63,7 @@ export const examplesEDElement: NonEmptyArray<EDElement> = [
   },
 ];
 
-export type ExtendedDescription = Array<EDElement>;
+export type ExtendedDescription = Array<Item>;
 export const examplesExtendedDescription: NonEmptyArray<ExtendedDescription> = [
   [
     {
@@ -80,8 +80,8 @@ export const examplesExtendedDescription: NonEmptyArray<ExtendedDescription> = [
   ],
 ];
 
-export function* fromEDLinesG(lines: Array<string>): Generator<EDElement, void, unknown> {
-  let current: EDElement | null = null;
+export function* fromLinesG(lines: Array<string>): Generator<Item, void, unknown> {
+  let current: Item | null = null;
   for (const line of lines) {
     if (line === ' .') {
       if (current !== null) {
@@ -138,6 +138,6 @@ export function* fromEDLinesG(lines: Array<string>): Generator<EDElement, void, 
   }
 }
 
-export function fromEDLines(lines: Array<string>): Array<EDElement> {
-  return Array.from(fromEDLinesG(lines));
+export function fromLines(lines: Array<string>): Array<Item> {
+  return Array.from(fromLinesG(lines));
 }

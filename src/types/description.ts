@@ -25,7 +25,7 @@ export const examplesDescription: NonEmptyArray<Description> = [
 
 export function fromStruct(struct: Struct): Description {
   const [synopsis, ...ext] = struct['Description'];
-  const extended = ExtendedDescription_.fromEDLines(ext);
+  const extended = ExtendedDescription_.fromLines(ext);
   return {
     synopsis,
     extended,

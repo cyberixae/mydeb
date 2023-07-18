@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
-import type { EDElement } from '../types/extended-description';
+import type { Item } from '../types/extended-description';
 import type { PackageId } from '../types/package-id';
 import type { PackageResponse } from '../types/endpoints/package';
 import { absurd } from '../lib/function';
@@ -56,7 +56,7 @@ export const Package: React.FC<unknown> = () => {
       <div>{pkg.info.description.synopsis}</div>
       <br />
       <div>
-        {pkg.info.description.extended.map((elem: EDElement, i: number) => (
+        {pkg.info.description.extended.map((elem: Item, i: number) => (
           <React.Fragment key={i}>
             {(() => {
               if (elem._ED === 'blank') {
