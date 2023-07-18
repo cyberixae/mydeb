@@ -4,16 +4,13 @@ import './app.css';
 import type { PackageId } from '../types/package-id';
 import type { PackageResponse } from '../types/endpoints/package';
 import * as api from './api';
+import { isPackageId } from '../types/package-id';
 import { Header } from '../components/app-header';
 import { FrontPageLink } from './containers/link--front-page';
 import { PackageLink } from './containers/link--package';
 import { ExtendedDescriptionText } from '../components/extended-description-text';
 import { DependenciesList } from '../components/dependencies-list';
 import { PackageList } from '../components/package-list';
-
-function isPackageId(u: unknown): u is PackageId {
-  return typeof u === 'string';
-}
 
 type ViewParams = {
   packageId: PackageId;
