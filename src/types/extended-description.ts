@@ -80,53 +80,48 @@ export const examplesExtendedDescription: NonEmptyArray<ExtendedDescription> = [
   ],
 ];
 
+const PREFIX_CONTROL = ' .';
+const PREFIX_VERBATIM = '  ';
+const PREFIX_PARAGRAPH = ' ';
+
+const CONTROL_BLANK = '';
+
 export function* fromLinesG(lines: Array<string>): Generator<Item, void, unknown> {
   let current: Item | null = null;
   for (const line of lines) {
-    if (line === ' .') {
+    if (line.startsWith(PREFIX_CONTROL)) {
+      const payload = line.slice(PREFIX_CONTROL.length);
       if (current !== null) {
         yield current;
       }
-      yield { _ED: 'blank' };
       current = null;
-    } else if (line.startsWith(' .')) {
-      if (current !== null) {
-        yield current;
-        current = null;
+      if (payload === CONTROL_BLANK) {
+        yield blank;
+      } else {
+        /* ignore unknown control sequence */
       }
-      /* ignore future expansion */
-    } else if (line.startsWith('  ')) {
+    } else if (line.startsWith(PREFIX_VERBATIM)) {
+      const payload = line.slice(PREFIX_VERBATIM.length);
       if (current === null) {
-        current = {
-          _ED: 'verbatim',
-          lines: [line],
-        };
+        current = verbatim(payload);
       } else {
         if (current._ED === 'verbatim') {
-          current.lines.push(line);
+          current.lines.push(payload);
         } else {
           yield current;
-          current = {
-            _ED: 'verbatim',
-            lines: [line],
-          };
+          current = verbatim(payload);
         }
       }
-    } else if (line.startsWith(' ')) {
+    } else if (line.startsWith(PREFIX_PARAGRAPH)) {
+      const payload = line.slice(PREFIX_PARAGRAPH.length);
       if (current === null) {
-        current = {
-          _ED: 'paragraph',
-          lines: [line],
-        };
+        current = paragraph(payload);
       } else {
         if (current._ED === 'paragraph') {
-          current.lines.push(line);
+          current.lines.push(payload);
         } else {
           yield current;
-          current = {
-            _ED: 'paragraph',
-            lines: [line],
-          };
+          current = paragraph(payload);
         }
       }
     } else {
