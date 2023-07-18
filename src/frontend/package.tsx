@@ -9,6 +9,7 @@ import { FrontPageLink } from './containers/link--front-page';
 import { PackageLink } from './containers/link--package';
 import { ExtendedDescriptionText } from '../components/extended-description-text';
 import { DependenciesList } from '../components/dependencies-list';
+import { PackageList } from '../components/package-list';
 
 function isPackageId(u: unknown): u is PackageId {
   return typeof u === 'string';
@@ -68,15 +69,7 @@ export const Package: React.FC<unknown> = () => {
       </div>
       <br />
       <div>
-        Reverse:{' '}
-        {pkg.reverse.map((id, i) => {
-          return (
-            <span key={i}>
-              {i > 0 ? ', ' : ''}
-              {<PackageLink packageId={id}>{id}</PackageLink>}
-            </span>
-          );
-        })}
+        Reverse: <PackageList packages={pkg.reverse} PackageLink={PackageLink} />
       </div>
     </div>
   );
