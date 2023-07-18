@@ -26,6 +26,12 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
     res.send(PackagePluralEndpoint_.main(db));
   });
 
+  app.use(express.static('build'))
+
+  app.get('*', (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "../../build/index.html"))
+  });
+
   app.listen(port, () => {
     console.log(`MyDeb backend listening on port ${port}`);
   });
@@ -33,6 +39,6 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
 
 const file = path.join(__dirname, '../../private/status.real');
 
-main(3001, file);
+main(8080, file);
 
 export {};
