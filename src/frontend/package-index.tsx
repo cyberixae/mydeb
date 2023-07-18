@@ -1,12 +1,14 @@
-import React from 'react';
-import { useLoaderData, LoaderFunction } from 'react-router-dom';
-import { FrontPageLink } from './containers/link--front-page';
-import { PackageLink } from './containers/link--package';
 import './app.css';
-import { PackagePluralResponse } from '../types/endpoints/package-plural';
-import * as api from './api';
+
+import React from 'react';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
+
 import { Header } from '../components/app-header';
 import { PackageList } from '../components/package-list';
+import { PackagePluralResponse } from '../types/endpoints/package-plural';
+import * as api from './api';
+import { FrontPageLink } from './containers/link--front-page';
+import { PackageLink } from './containers/link--package';
 
 export const packageIndexLoader: LoaderFunction = async function (_args) {
   const res = await api.fetchPackages();

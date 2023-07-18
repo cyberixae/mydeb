@@ -1,12 +1,10 @@
-import type { PackageInfo } from './package-info';
-
 import * as Array_ from '../lib/array';
-
-import * as Structs_ from './structs';
-import * as PackageId_ from './package-id';
-import * as Description_ from './description';
 import * as Dependencies_ from './dependencies';
+import * as Description_ from './description';
 import * as InstallationStatus_ from './installation-status';
+import * as PackageId_ from './package-id';
+import type { PackageInfo } from './package-info';
+import * as Structs_ from './structs';
 
 export type PackageInfosG = AsyncGenerator<PackageInfo, void, unknown>;
 

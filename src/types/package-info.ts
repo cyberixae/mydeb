@@ -1,9 +1,8 @@
 import type { NonEmptyArray } from '../lib/non-empty-array';
-
-import type { PackageId } from './package-id';
-import type { Description } from './description';
 import type { Dependencies } from './dependencies';
+import type { Description } from './description';
 import type { InstallationStatus } from './installation-status';
+import type { PackageId } from './package-id';
 
 export type PackageInfo = {
   readonly packageId: PackageId;

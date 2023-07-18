@@ -1,5 +1,5 @@
-import { tuple } from '../tuple';
 import * as Record_ from '../record';
+import { tuple } from '../tuple';
 
 describe('Record', () => {
   describe('collectKeyValuePairs function', () => {

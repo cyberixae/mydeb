@@ -1,7 +1,6 @@
 import type { PackageInfoTable } from './package-info-table';
-import type { ReverseLookupTable } from './reverse-lookup-table';
-
 import * as PackageInfoTable_ from './package-info-table';
+import type { ReverseLookupTable } from './reverse-lookup-table';
 import * as ReverseLookupTable_ from './reverse-lookup-table';
 
 export type Model = {

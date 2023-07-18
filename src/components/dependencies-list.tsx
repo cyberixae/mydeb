@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { PackageId } from '../types/package-id';
-import { DepAvailability } from '../types/endpoints/package';
 import { Dependencies } from '../types/dependencies';
+import { DepAvailability } from '../types/endpoints/package';
+import { PackageId } from '../types/package-id';
 
 interface DependenciesListProps {
   readonly dependencies: Dependencies;

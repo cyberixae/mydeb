@@ -1,6 +1,6 @@
+import * as AsyncIterable_ from '../../lib/async-iterable';
 import type { Structs } from '../structs';
 import * as Structs_ from '../structs';
-import * as AsyncIterable_ from '../../lib/async-iterable';
 
 describe('Structs', () => {
   describe('fromLines function', () => {

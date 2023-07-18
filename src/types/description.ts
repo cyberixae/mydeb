@@ -1,8 +1,7 @@
 import type { NonEmptyArray } from '../lib/non-empty-array';
-
 import * as ExtendedDescription_ from '../types/extended-description';
-import type { Struct } from './struct';
 import type { ExtendedDescription } from './extended-description';
+import type { Struct } from './struct';
 
 export type Synopsis = string;
 export const examplesSynopsis: NonEmptyArray<Synopsis> = ['test123 is cool package'];

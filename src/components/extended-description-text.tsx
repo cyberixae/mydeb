@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { ExtendedDescription, Item } from '../types/extended-description';
 import { absurd } from '../lib/function';
+import { ExtendedDescription, Item } from '../types/extended-description';
 
 interface ExtendedDescriptionTextProps {
   readonly extendedDescription: ExtendedDescription;

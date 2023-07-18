@@ -1,5 +1,4 @@
 import type { NonEmptyArray } from '../../lib/non-empty-array';
-
 import { PackageInfo } from '../package-info';
 
 export type PackagePluralResponse = {

@@ -1,16 +1,18 @@
-import React from 'react';
-import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
-import type { PackageId } from '../types/package-id';
-import type { PackageResponse } from '../types/endpoints/package';
-import * as api from './api';
-import { isPackageId } from '../types/package-id';
+
+import React from 'react';
+import { LoaderFunction, Params, useLoaderData } from 'react-router-dom';
+
 import { Header } from '../components/app-header';
+import { DependenciesList } from '../components/dependencies-list';
+import { ExtendedDescriptionText } from '../components/extended-description-text';
+import { PackageList } from '../components/package-list';
+import type { PackageResponse } from '../types/endpoints/package';
+import type { PackageId } from '../types/package-id';
+import { isPackageId } from '../types/package-id';
+import * as api from './api';
 import { FrontPageLink } from './containers/link--front-page';
 import { PackageLink } from './containers/link--package';
-import { ExtendedDescriptionText } from '../components/extended-description-text';
-import { DependenciesList } from '../components/dependencies-list';
-import { PackageList } from '../components/package-list';
 
 type ViewParams = {
   packageId: PackageId;

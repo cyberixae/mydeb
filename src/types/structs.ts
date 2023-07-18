@@ -1,6 +1,4 @@
-
 import * as Array_ from '../lib/array';
-
 import { Struct, StructKey, StructValue } from './struct';
 
 function readStructKeyValue(line: string): [StructKey, StructValue] {

@@ -1,7 +1,6 @@
-import { PackageId } from '../../types/package-id';
 import * as Record_ from '../../lib/record';
 import { tuple } from '../../lib/tuple';
-
+import { PackageId } from '../../types/package-id';
 import { PackageInfoTable } from './package-info-table';
 
 export type ReverseLookupTable = Record<PackageId, Array<PackageId>>;

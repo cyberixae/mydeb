@@ -1,12 +1,11 @@
-import express from 'express';
 import type { Request, Response } from 'express';
-
+import express from 'express';
 import path from 'path';
-import { model } from './model/model';
-import { FilePath, read } from './lib/file';
 
 import * as PackageEndpoint_ from './endpoints/package';
 import * as PackagePluralEndpoint_ from './endpoints/package-plural';
+import { FilePath, read } from './lib/file';
+import { model } from './model/model';
 
 type Port = number;
 

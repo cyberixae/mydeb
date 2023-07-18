@@ -1,7 +1,5 @@
 import type { NonEmptyArray } from '../lib/non-empty-array';
-
 import type { PackageId } from './package-id';
-
 import type { Struct } from './struct';
 
 export type Alternatives = Array<PackageId>;

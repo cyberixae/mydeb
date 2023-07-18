@@ -1,5 +1,4 @@
 import type { NonEmptyArray } from '../lib/non-empty-array';
-
 import type { Struct } from './struct';
 
 export type InstallationStatus = boolean;

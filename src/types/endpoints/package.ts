@@ -1,5 +1,4 @@
 import type { NonEmptyArray } from '../../lib/non-empty-array';
-
 import { PackageId } from '../package-id';
 import { PackageInfo } from '../package-info';
 

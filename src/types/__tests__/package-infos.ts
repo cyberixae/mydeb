@@ -1,7 +1,7 @@
-import type { PackageInfos } from '../package-infos';
-import * as PackageInfos_ from '../package-infos';
 import * as AsyncIterable_ from '../../lib/async-iterable';
 import * as ExtendedDescription_ from '../extended-description';
+import type { PackageInfos } from '../package-infos';
+import * as PackageInfos_ from '../package-infos';
 
 describe('PackageInfos', () => {
   describe('fromLines function', () => {

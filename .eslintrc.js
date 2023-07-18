@@ -1,4 +1,3 @@
-
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'simple-import-sort'],
@@ -14,5 +13,5 @@ module.exports = {
       1,
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
     ],
-  }
-}
+  },
+};
