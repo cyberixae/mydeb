@@ -27,7 +27,12 @@ function parseParams(params: Params): ViewParams {
 export const packageLoader: LoaderFunction = async function (args) {
   const { packageId } = parseParams(args.params);
 
-  const res = await api.fetchPackage(packageId);
+  let res;
+  try {
+    res = await api.fetchPackage(packageId);
+  } catch {
+    res = null;
+  }
 
   return {
     res,
@@ -35,16 +40,35 @@ export const packageLoader: LoaderFunction = async function (args) {
 };
 
 type ViewData = {
-  res: PackageResponse;
+  res: PackageResponse | null;
 };
 function useViewData(): ViewData {
   return useLoaderData() as any;
 }
 
 export const Package: React.FC<unknown> = () => {
-  const {
-    res: { pkg },
-  } = useViewData();
+  const { res } = useViewData();
+
+  if (res === null) {
+    return (
+      <div>
+        <div>
+          <Header FrontPageLink={FrontPageLink} />
+          <br />
+          <br />
+          <br />
+          <h2 style={{ textAlign: 'center' }}>404 Unknown package</h2>
+          <br />
+          <br />
+          <p style={{ textAlign: 'center' }}>
+            <FrontPageLink>package listing</FrontPageLink>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const { pkg } = res;
 
   return (
     <div>

@@ -11,5 +11,8 @@ export async function fetchPackages(): Promise<PackagePluralResponse> {
 export async function fetchPackage(packageId: PackageId): Promise<PackageResponse> {
   const url = `/api/package/${packageId}`;
   const res = await fetch(url);
-  return res.json();
+  if (res.ok) {
+    return res.json();
+  }
+  throw new Error('Failed to retrieve');
 }

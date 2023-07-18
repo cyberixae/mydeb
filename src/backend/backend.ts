@@ -21,13 +21,13 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
     const { packageId } = req.params;
     const response = PackageEndpoint_.main(db, packageId);
     if (response === null) {
-      res.status(404)
+      res.status(404);
     }
     res.send(response);
   });
 
   app.get('/api/package', (_req: Request, res: Response) => {
-    const response = PackagePluralEndpoint_.main(db)
+    const response = PackagePluralEndpoint_.main(db);
     res.send(response);
   });
 
