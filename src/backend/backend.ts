@@ -26,10 +26,10 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
     res.send(PackagePluralEndpoint_.main(db));
   });
 
-  app.use(express.static('build'))
+  app.use(express.static('build'));
 
   app.get('*', (_req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, "../../build/index.html"))
+    res.sendFile(path.join(__dirname, '../../build/index.html'));
   });
 
   app.listen(port, () => {
