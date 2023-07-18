@@ -22,6 +22,6 @@ export const Base: Story = {
   args: {
     dependencies: exampleDependencies,
     availability: {},
-    PackageLink: ({ children }) => (<a href="#">{children}</a>),
+    PackageLink: ({ children }) => <a href="#">{children}</a>,
   },
 };

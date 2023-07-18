@@ -17,6 +17,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Base: Story = {
   args: {
-    FrontPageLink: ({ children }) => (<a href="#">{children}</a>),
+    FrontPageLink: ({ children }) => <a href="#">{children}</a>,
   },
 };

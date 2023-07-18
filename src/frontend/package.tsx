@@ -59,7 +59,12 @@ export const Package: React.FC<unknown> = () => {
       <ExtendedDescriptionText extendedDescription={pkg.info.description.extended} />
       <br />
       <div>
-        Dependencies: <DependenciesList dependencies={pkg.info.dependencies} availability={pkg.available} PackageLink={PackageLink} />
+        Dependencies:{' '}
+        <DependenciesList
+          dependencies={pkg.info.dependencies}
+          availability={pkg.available}
+          PackageLink={PackageLink}
+        />
       </div>
       <br />
       <div>
