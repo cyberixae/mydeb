@@ -19,11 +19,16 @@ async function main(port: Port, filePath: FilePath): Promise<void> {
 
   app.get('/api/package/:packageId', (req: Request, res: Response) => {
     const { packageId } = req.params;
-    res.send(PackageEndpoint_.main(db, packageId));
+    const response = PackageEndpoint_.main(db, packageId);
+    if (response === null) {
+      res.status(404)
+    }
+    res.send(response);
   });
 
   app.get('/api/package', (_req: Request, res: Response) => {
-    res.send(PackagePluralEndpoint_.main(db));
+    const response = PackagePluralEndpoint_.main(db)
+    res.send(response);
   });
 
   app.use(express.static('build'));

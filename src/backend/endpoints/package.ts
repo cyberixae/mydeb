@@ -2,7 +2,12 @@ import type { DepAvailability, PackageResponse } from '../../types/endpoints/pac
 import type { PackageId } from '../../types/package-id';
 import type { Model } from '../model/model';
 
-export function main(db: Model, packageId: PackageId): PackageResponse {
+export function main(db: Model, packageId: PackageId): null|PackageResponse {
+
+  if (db.infos.hasOwnProperty(packageId) === false) {
+    return null
+  }
+
   const info = db.infos[packageId];
 
   const available: DepAvailability = Object.fromEntries(
