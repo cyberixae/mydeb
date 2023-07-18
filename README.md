@@ -29,5 +29,6 @@ Some other useful command
 
 ```
 yarn test      # run unit tests
-yarn prettify  # run prettier
+yarn lint      # run quality checks
+yarn prettify  # fix style issues
 ```
