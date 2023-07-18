@@ -57,14 +57,15 @@
   },
   "scripts": {
     "prettify": "yarn prettier --write '**/*.{css,html,js,json,md,ts,tsx}'",
-    "dev-backend": "yarn ts-node src/backend/backend",
+    "backend": "yarn ts-node src/backend/backend",
+    "dev-backend": "yarn backend",
     "dev-frontend": "react-scripts start",
     "dev": "yarn dev-backend & yarn dev-frontend",
-    "mydeb": "yarn build && yarn ts-node src/backend/backend",
+    "mydeb": "yarn build && yarn build-storybook && yarn backend",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build -o build/styleguide"
   }
 }
