@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useLoaderData, LoaderFunction } from 'react-router-dom';
+import { FrontPageLink } from './containers/atoms/link--front-page';
 import './app.css';
 import { PackagePluralResponse } from '../types/endpoints/package-plural';
 import * as api from './api';
+import { Header } from '../stories/header';
 
 export const packageIndexLoader: LoaderFunction = async function (_args) {
   const res = await api.fetchPackages();
@@ -23,7 +25,7 @@ export const PackageIndex: React.FC<unknown> = () => {
 
   return (
     <div>
-      <h1>MyDeb</h1>
+      <Header Link={FrontPageLink} />
       <br />
       {packages
         .sort((a, b) => (a.packageId > b.packageId ? 1 : -1))

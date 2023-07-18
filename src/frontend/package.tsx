@@ -1,11 +1,14 @@
 import React from 'react';
-import { Link, useLoaderData, LoaderFunction, Params } from 'react-router-dom';
+import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
 import type { Item } from '../types/extended-description';
 import type { PackageId } from '../types/package-id';
 import type { PackageResponse } from '../types/endpoints/package';
 import { absurd } from '../lib/function';
 import * as api from './api';
+import { Header } from '../stories/header';
+import { FrontPageLink } from './containers/atoms/link--front-page';
+import { PackageLink } from './containers/atoms/link--package';
 
 function isPackageId(u: unknown): u is PackageId {
   return typeof u === 'string';
@@ -47,9 +50,7 @@ export const Package: React.FC<unknown> = () => {
 
   return (
     <div>
-      <h1>
-        <Link to="/">MyDeb</Link>
-      </h1>
+      <Header Link={FrontPageLink} />
       <br />
       <h2>{pkg.info.packageId}</h2>
       <br />
@@ -84,7 +85,7 @@ export const Package: React.FC<unknown> = () => {
               return (
                 <span key={i2}>
                   {i2 > 0 ? ' | ' : ''}
-                  {avail ? <Link to={`/package/${id}`}>{id}</Link> : id}
+                  {avail ? <PackageLink packageId={id}>{id}</PackageLink> : id}
                 </span>
               );
             })}
@@ -98,7 +99,7 @@ export const Package: React.FC<unknown> = () => {
           return (
             <span key={i}>
               {i > 0 ? ', ' : ''}
-              {<Link to={`/package/${id}`}>{id}</Link>}
+              {<PackageLink packageId={id}>{id}</PackageLink>}
             </span>
           );
         })}
