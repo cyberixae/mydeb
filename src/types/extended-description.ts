@@ -10,6 +10,10 @@ export type EDParagraph = {
   readonly _ED: 'paragraph';
   readonly lines: Array<string>;
 };
+export const paragraph = (...lines: Array<string>): EDParagraph => ({
+  _ED: 'paragraph',
+  lines,
+});
 export const examplesEDParagraph: NonEmptyArray<EDParagraph> = [
   {
     _ED: 'paragraph',
@@ -21,6 +25,10 @@ export type EDVerbatim = {
   readonly _ED: 'verbatim';
   readonly lines: Array<string>;
 };
+export const verbatim = (...lines: Array<string>): EDVerbatim => ({
+  _ED: 'verbatim',
+  lines,
+});
 export const examplesEDVerbatim: NonEmptyArray<EDVerbatim> = [
   {
     _ED: 'verbatim',
@@ -30,6 +38,9 @@ export const examplesEDVerbatim: NonEmptyArray<EDVerbatim> = [
 
 export type EDBlank = {
   readonly _ED: 'blank';
+};
+export const blank: EDBlank = {
+  _ED: 'blank',
 };
 export const examplesEDBlank: NonEmptyArray<EDBlank> = [
   {
@@ -79,6 +90,10 @@ export function* fromEDLinesG(lines: Array<string>): Generator<EDElement, void, 
       yield { _ED: 'blank' };
       current = null;
     } else if (line.startsWith(' .')) {
+      if (current !== null) {
+        yield current;
+        current = null;
+      }
       /* ignore future expansion */
     } else if (line.startsWith('  ')) {
       if (current === null) {

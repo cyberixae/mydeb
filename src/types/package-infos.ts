@@ -8,9 +8,9 @@ import * as Description_ from './description';
 import * as Dependencies_ from './dependencies';
 import * as InstallationStatus_ from './installation-status';
 
-export async function* fromLinesG(
-  lines: AsyncIterable<string>,
-): AsyncGenerator<PackageInfo, void, unknown> {
+export type PackageInfosG = AsyncGenerator<PackageInfo, void, unknown>;
+
+export async function* fromLinesG(lines: AsyncIterable<string>): PackageInfosG {
   for await (const struct of Struct_.fromLinesG(lines)) {
     const info: PackageInfo = {
       packageId: PackageId_.fromStruct(struct),
@@ -22,8 +22,8 @@ export async function* fromLinesG(
   }
 }
 
-export async function fromLines(
-  lines: AsyncIterable<string>,
-): Promise<Array<PackageInfo>> {
+export type PackageInfos = Array<PackageInfo>;
+
+export async function fromLines(lines: AsyncIterable<string>): Promise<PackageInfos> {
   return Array_.fromAsync(fromLinesG(lines));
 }

@@ -32,7 +32,7 @@ export const examplesPackageResponse: NonEmptyArray<PackageResponse> = [
             },
           ],
         },
-        dependencies: ['test456'],
+        dependencies: [['test456']],
         installationStatus: true,
       },
       reverse: ['test789'],
