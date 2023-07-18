@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLoaderData, LoaderFunction } from 'react-router-dom';
+import { useLoaderData, LoaderFunction } from 'react-router-dom';
 import { FrontPageLink } from './containers/link--front-page';
 import { PackageLink } from './containers/link--package';
 import './app.css';
