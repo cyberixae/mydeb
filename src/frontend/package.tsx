@@ -6,7 +6,7 @@ import type { PackageId } from '../types/package-id';
 import type { PackageResponse } from '../types/endpoints/package';
 import { absurd } from '../lib/function';
 import * as api from './api';
-import { Header } from '../stories/header';
+import { Header } from '../components/header';
 import { FrontPageLink } from './containers/atoms/link--front-page';
 import { PackageLink } from './containers/atoms/link--package';
 

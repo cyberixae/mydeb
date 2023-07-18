@@ -4,7 +4,7 @@ import { FrontPageLink } from './containers/atoms/link--front-page';
 import './app.css';
 import { PackagePluralResponse } from '../types/endpoints/package-plural';
 import * as api from './api';
-import { Header } from '../stories/header';
+import { Header } from '../components/header';
 
 export const packageIndexLoader: LoaderFunction = async function (_args) {
   const res = await api.fetchPackages();
