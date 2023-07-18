@@ -61,11 +61,12 @@
     "dev-backend": "yarn backend",
     "dev-frontend": "react-scripts start",
     "dev": "yarn dev-backend & yarn dev-frontend",
-    "mydeb": "yarn build && yarn build-storybook && yarn backend",
+    "mydeb": "yarn build && yarn build-styleguide && yarn backend",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test-watcher": "react-scripts test",
+    "test": "yarn test-watcher --watchAll=false",
     "eject": "react-scripts eject",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o build/styleguide"
+    "dev-styleguide": "storybook dev -p 6006",
+    "build-styleguide": "storybook build -o build/styleguide"
   }
 }

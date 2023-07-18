@@ -14,12 +14,20 @@ Then open http://localhost:8080/ in your browser to see the user interface.
 
 ## Development
 
-To run development environment.
+To run development environment. Run the following commands in separate terminal windows.
 
 ```
-npm install -g yarn
-yarn
-yarn dev
+yarn dev-backend     # start development backend
+yarn dev-frontend    # start development frontend
+yarn dev-styleguide  # start development styleguide
 ```
 
-You may wish to run `dev-backend` and `dev-frontend` separately, since the backend doesn't currently have a watcher.
+The development backend is missing a watcher and needs to be restarted after changes.
+The development frontend and styleguide should auto-update on changes.
+
+Some other useful command
+
+```
+yarn test      # run unit tests
+yarn prettify  # run prettier
+```
