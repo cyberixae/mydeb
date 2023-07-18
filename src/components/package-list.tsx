@@ -7,13 +7,21 @@ interface PackageListProps {
   readonly PackageLink: React.FC<{ packageId: PackageId; children: React.ReactNode }>;
 }
 
-export const PackageList: React.FC<PackageListProps> = (props) => (
-  <>
-    {props.packages.sort().map((packageId, i) => (
-      <span key={packageId}>
-        {i > 0 ? ', ' : ''}
-        <props.PackageLink packageId={packageId}>{packageId}</props.PackageLink>
-      </span>
-    ))}
-  </>
-);
+export const PackageList: React.FC<PackageListProps> = (props) => {
+  const { packages } = props;
+
+  if (packages.length === 0) {
+    return <i>no packages</i>;
+  }
+
+  return (
+    <>
+      {packages.sort().map((packageId, i) => (
+        <span key={packageId}>
+          {i > 0 ? ', ' : ''}
+          <props.PackageLink packageId={packageId}>{packageId}</props.PackageLink>
+        </span>
+      ))}
+    </>
+  );
+};

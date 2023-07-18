@@ -21,3 +21,10 @@ export const Base: Story = {
     PackageLink: ({ children }) => <a href="#">{children}</a>,
   },
 };
+
+export const Empty: Story = {
+  args: {
+    packages: [],
+    PackageLink: ({ children }) => <a href="#">{children}</a>,
+  },
+};

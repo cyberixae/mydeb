@@ -21,6 +21,17 @@ type Story = StoryObj<typeof meta>;
 export const Base: Story = {
   args: {
     dependencies: exampleDependencies,
+    availability: {
+      test123: true,
+      test789: true,
+    },
+    PackageLink: ({ children }) => <a href="#">{children}</a>,
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    dependencies: [],
     availability: {},
     PackageLink: ({ children }) => <a href="#">{children}</a>,
   },
