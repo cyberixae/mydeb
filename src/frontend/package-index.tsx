@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoaderData, LoaderFunction } from 'react-router-dom';
+import { Link, useLoaderData, LoaderFunction } from 'react-router-dom';
 import './app.css';
 import { PackagePluralResponse } from '../types/endpoints/package-plural';
 import * as api from './api';
@@ -30,7 +30,7 @@ export const PackageIndex: React.FC<unknown> = () => {
         .map((pkg, i) => (
           <span key={pkg.packageId}>
             {i > 0 ? ', ' : ''}
-            <a href={`/package/${pkg.packageId}`}>{pkg.packageId}</a>
+            <Link to={`/package/${pkg.packageId}`}>{pkg.packageId}</Link>
           </span>
         ))}
     </div>

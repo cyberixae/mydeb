@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
+import { Link, useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
 import type { EDElement } from '../types/extended-description';
 import type { PackageId } from '../types/package-id';
@@ -48,7 +48,7 @@ export const Package: React.FC<unknown> = () => {
   return (
     <div>
       <h1>
-        <a href="/">MyDeb</a>
+        <Link to="/">MyDeb</Link>
       </h1>
       <br />
       <h2>{pkg.info.packageId}</h2>
@@ -84,7 +84,7 @@ export const Package: React.FC<unknown> = () => {
               return (
                 <span key={i2}>
                   {i2 > 0 ? ' | ' : ''}
-                  {avail ? <a href={`/package/${id}`}>{id}</a> : id}
+                  {avail ? <Link to={`/package/${id}`}>{id}</Link> : id}
                 </span>
               );
             })}
@@ -98,7 +98,7 @@ export const Package: React.FC<unknown> = () => {
           return (
             <span key={i}>
               {i > 0 ? ', ' : ''}
-              {<a href={`/package/${id}`}>{id}</a>}
+              {<Link to={`/package/${id}`}>{id}</Link>}
             </span>
           );
         })}
