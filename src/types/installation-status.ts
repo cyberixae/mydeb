@@ -1,6 +1,12 @@
+import type { NonEmptyArray } from '../lib/non-empty-array';
+
 import type { Struct } from './struct';
 
 export type InstallationStatus = boolean;
+export const examplesInstallationStatus: NonEmptyArray<InstallationStatus> = [
+  true,
+  false,
+];
 
 export function fromStruct(struct: Struct): InstallationStatus {
   const values = struct['Status'];

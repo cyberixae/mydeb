@@ -1,10 +1,17 @@
+import type { NonEmptyArray } from '../lib/non-empty-array';
+
 import type { PackageId } from './package-id';
 
 import type { Struct } from './struct';
 
 export type Alternatives = Array<PackageId>;
 
+export const examplesAlternatives: NonEmptyArray<Alternatives> = [['test123', 'test456']];
+
 export type Dependencies = Array<Alternatives>;
+export const examplesDependencies: NonEmptyArray<Dependencies> = [
+  [['test123', 'test456'], ['test789']],
+];
 
 export function fromStruct(struct: Struct): Dependencies {
   const values = struct['Depends'];

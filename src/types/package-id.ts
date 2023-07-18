@@ -1,6 +1,9 @@
+import type { NonEmptyArray } from '../lib/non-empty-array';
+
 import type { Struct } from './struct';
 
 export type PackageId = string;
+export const examplesPackageId: NonEmptyArray<PackageId> = ['test123'];
 
 export function fromStruct(struct: Struct): PackageId {
   const values = struct['Package'];

@@ -1,17 +1,73 @@
+import type { NonEmptyArray } from '../lib/non-empty-array';
+
+const asciiArt = `
+     *
+    * *
+   * * *
+`.split('\n');
+
 export type EDParagraph = {
   readonly _ED: 'paragraph';
   readonly lines: Array<string>;
 };
+export const examplesEDParagraph: NonEmptyArray<EDParagraph> = [
+  {
+    _ED: 'paragraph',
+    lines: ['it is indeed cool', 'maybe the best package ever'],
+  },
+];
+
 export type EDVerbatim = {
   readonly _ED: 'verbatim';
   readonly lines: Array<string>;
 };
+export const examplesEDVerbatim: NonEmptyArray<EDVerbatim> = [
+  {
+    _ED: 'verbatim',
+    lines: asciiArt,
+  },
+];
+
 export type EDBlank = {
   readonly _ED: 'blank';
 };
+export const examplesEDBlank: NonEmptyArray<EDBlank> = [
+  {
+    _ED: 'blank',
+  },
+];
+
 export type EDElement = EDParagraph | EDVerbatim | EDBlank;
+export const examplesEDElement: NonEmptyArray<EDElement> = [
+  {
+    _ED: 'paragraph',
+    lines: ['it is indeed cool', 'maybe the best package ever'],
+  },
+  {
+    _ED: 'blank',
+  },
+  {
+    _ED: 'verbatim',
+    lines: asciiArt,
+  },
+];
 
 export type ExtendedDescription = Array<EDElement>;
+export const examplesExtendedDescription: NonEmptyArray<ExtendedDescription> = [
+  [
+    {
+      _ED: 'paragraph',
+      lines: ['it is indeed cool', 'maybe the best package ever'],
+    },
+    {
+      _ED: 'blank',
+    },
+    {
+      _ED: 'verbatim',
+      lines: asciiArt,
+    },
+  ],
+];
 
 export function* fromEDLinesG(lines: Array<string>): Generator<EDElement, void, unknown> {
   let current: EDElement | null = null;
