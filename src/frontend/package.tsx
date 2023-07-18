@@ -1,14 +1,14 @@
 import React from 'react';
 import { useLoaderData, LoaderFunction, Params } from 'react-router-dom';
 import './app.css';
-import type { Item } from '../types/extended-description';
 import type { PackageId } from '../types/package-id';
 import type { PackageResponse } from '../types/endpoints/package';
-import { absurd } from '../lib/function';
 import * as api from './api';
-import { Header } from '../components/header';
-import { FrontPageLink } from './containers/atoms/link--front-page';
-import { PackageLink } from './containers/atoms/link--package';
+import { Header } from '../components/app-header';
+import { FrontPageLink } from './containers/link--front-page';
+import { PackageLink } from './containers/link--package';
+import { ExtendedDescriptionText } from '../components/extended-description-text';
+import { DependenciesList } from '../components/dependencies-list';
 
 function isPackageId(u: unknown): u is PackageId {
   return typeof u === 'string';
@@ -50,47 +50,16 @@ export const Package: React.FC<unknown> = () => {
 
   return (
     <div>
-      <Header Link={FrontPageLink} />
+      <Header FrontPageLink={FrontPageLink} />
       <br />
       <h2>{pkg.info.packageId}</h2>
       <br />
       <div>{pkg.info.description.synopsis}</div>
       <br />
-      <div>
-        {pkg.info.description.extended.map((elem: Item, i: number) => (
-          <React.Fragment key={i}>
-            {(() => {
-              if (elem._ED === 'blank') {
-                return <br />;
-              }
-              if (elem._ED === 'verbatim') {
-                return <pre>{elem.lines.join('\n')}</pre>;
-              }
-              if (elem._ED === 'paragraph') {
-                return <p>{elem.lines.join('\n')}</p>;
-              }
-              return absurd(elem, 'absurd description element');
-            })()}
-          </React.Fragment>
-        ))}
-      </div>
+      <ExtendedDescriptionText extendedDescription={pkg.info.description.extended} />
       <br />
       <div>
-        Dependencies:{' '}
-        {pkg.info.dependencies.map((alternatives, i1) => (
-          <React.Fragment key={i1}>
-            {i1 > 0 ? ', ' : ''}
-            {alternatives.map((id, i2) => {
-              const avail = pkg['available'][id];
-              return (
-                <span key={i2}>
-                  {i2 > 0 ? ' | ' : ''}
-                  {avail ? <PackageLink packageId={id}>{id}</PackageLink> : id}
-                </span>
-              );
-            })}
-          </React.Fragment>
-        ))}
+        Dependencies: <DependenciesList dependencies={pkg.info.dependencies} availability={pkg.available} PackageLink={PackageLink} />
       </div>
       <br />
       <div>

@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 
-import { PackageId } from '../../../types/package-id';
+import { PackageId } from '../../types/package-id';
 
 export type PackageLinkProps = {
   readonly packageId: PackageId;

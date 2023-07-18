@@ -1,10 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Header } from './header';
+import { Header } from './app-header';
 
 const meta = {
-  title: 'Molecules/Header',
+  title: 'Components/App/Header',
   component: Header,
   tags: ['autodocs'],
   parameters: {
@@ -17,6 +17,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Base: Story = {
   args: {
-    Link: ({ children }) => (<a href="#">{children}</a>),
+    FrontPageLink: ({ children }) => (<a href="#">{children}</a>),
   },
 };
