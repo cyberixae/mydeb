@@ -14,16 +14,16 @@ export const ExtendedDescriptionText: React.FC<ExtendedDescriptionTextProps> = (
     {props.extendedDescription.map((elem: Item, i: number) => (
       <React.Fragment key={i}>
         {(() => {
-          if (elem._ED === 'blank') {
-            return <br />;
+          switch (elem._ED) {
+            case 'blank':
+              return <br />;
+            case 'verbatim':
+              return <pre style={{ margin: 0 }}>{elem.lines.join('\n')}</pre>;
+            case 'paragraph':
+              return <p style={{ margin: 0 }}>{elem.lines.join('\n')}</p>;
+            default:
+              return absurd(elem, 'absurd description element');
           }
-          if (elem._ED === 'verbatim') {
-            return <pre style={{ margin: 0 }}>{elem.lines.join('\n')}</pre>;
-          }
-          if (elem._ED === 'paragraph') {
-            return <p style={{ margin: 0 }}>{elem.lines.join('\n')}</p>;
-          }
-          return absurd(elem, 'absurd description element');
         })()}
       </React.Fragment>
     ))}
